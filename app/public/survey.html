@@ -181,7 +181,7 @@
                         </div>
                         <div class="modal-body text-center noselect" id="recommendedBody">
                         <div> <h2 class="nameShow"> </h2> </div>
-                        <div> <class="picShow"></div>
+                        <div> <img class="picShow" style="width: 250px; height: 250px"></div>
 
                         </div>
                         <div class="modal-footer">
@@ -190,6 +190,12 @@
                     </div>
                 </div>
             </div>
+
+       <footer class="footer">
+          <div class="container">
+                <p><a href="/api/friend">API Friends List</a></p>
+          </div>
+        </footer>
     </div>
     </form>
     <script>
@@ -253,15 +259,16 @@
             }
             return scoreTot
         }
+var currentURL = window.location.origin;
 
-        $.post("/api/friend", newFriend)
+        $.post(currentURL + "/api/friend", newFriend)
             .done(function(data) {
                 newFriend.scoreTotal = addTotal();
                 alert("Adding 'friend'...");
                 //Show the modal      
                 $('#myModal').modal('show');
                 $(".nameShow").text(data.name);
-                $(".picShow").text(data.picture);
+                $(".picShow").attr('src', data.picture);
             });
 
     });

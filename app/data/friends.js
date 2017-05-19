@@ -1,57 +1,25 @@
-var express = require("express");
-var bodyParser = require("body-parser");
-var path = require("path");
 
-var app = express();
-
-var PORT = 8000;
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.text());
-app.use(bodyParser.json({ type: "application/vnd.api+json" }));
-
-var friends = [];
-
-
-app.get("/", function(req, res) {
-  res.sendFile(path.join(__dirname, "home.html"));
-});
-
-app.get("/survey", function(req, res) {
-  res.sendFile(path.join(__dirname, "survey.html"));
-});
- 
-
- app.get("/api/:friendName?", function (req, response){
-	var res = req.params.friend;
-
-	if(res){
-		console.log(res);
-		let size = res.length;
-		for(var i = 0; i < size; i++){
-			if(res === friends[i].name){
-				return response.json(friends[i]);
-			}
-		}
-		return response.json(false);
-	}
-	return response.json(friends);
-});
+var friends = [{
+    name: "Josh",
+    picture: "https://static.pexels.com/photos/59523/pexels-photo-59523.jpeg",
+    scores: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    scoreTotal: 10
+}, {
+    name: "Josh2",
+    picture: "https://s-media-cache-ak0.pinimg.com/736x/63/0f/0e/630f0ef3f6f3126ca11f19f4a9b85243.jpg",
+    scores: [2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+    scoreTotal: 20
+}, {
+    name: "Josh3",
+    picture: "https://www.cesarsway.com/sites/newcesarsway/files/styles/large_article_preview/public/How%20to%20calm%20a%20hyper%20dog.jpg?itok=Vg7ueySi",
+    scores: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+    scoreTotal: 30
+}, {
+    name: "Josh4",
+    picture: "https://vignette1.wikia.nocookie.net/sanicsource/images/9/97/Doge.jpg/revision/latest?cb=20160112233015",
+    scores: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
+    scoreTotal: 40
+}];
 
 
-app.post("/api/new", function(req, res){
-	var newFriend = req.body;
-	newFriend.name = newFriend.name.replace(/\s+/g, "").toLowerCase();
-
-	console.log(newFriend);
-
-	friends.push(newFriend);
-
-	response.json(newFriend);
-});
-
-
-app.listen(PORT, function() {
-  console.log("App listening on port " + PORT);
-});
+module.exports = friends

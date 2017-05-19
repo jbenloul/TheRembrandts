@@ -1,48 +1,49 @@
 var express = require('express');
 var app = express();
 
-var mysql = require("mysql");
+var port = process.env.PORT || 8000;
 
-var port = 8000;
+var friends = require("../data/friends");
 
-//data from the mysql
+module.exports = function(app) {
 
-var connection = mysql.createConnection({
-    host: "localhost",
-    port: 3306,
-
-    // Your username
-    user: "root",
-
-    // Your password
-    password: "something",
-    database: "friends_db"
-});
- 
-
-app.get('/', function (request, response) {
-
-res.send("FRIEND FINDER!");
-})
-
-app.get('/api/:friends?'){
-	var selected = request.params.friends;
-
-	if (selected){
-		console.log(selected);
-
-		for (var i = 0; i < friends_db.length; i++) {
-			if (newFriend[i].name === selected){
-				return request.json(newFriend[i]);
-			}
-		}
-
-		return request.send("This isn't a valid friend");
-
-	}
-	return res.json(newFriend)
+function compareFriends(arr, num) {
+    var currentDist = 41;
+    var ind = 0
+    for (var i = 0; i < arr.length; i++) {
+        if (Math.abs(arr[i].scoreTotal) - Math.abs(num) < currentDist) {
+            currentDist = Math.abs(arr[i].scoreTotal) - Math.abs(num);
+            ind = i;
+        }
+    }
+    return ind;
 }
 
-app.listen(port, function() {
-  console.log("App listening on port " + PORT);
+app.get("/api/:friendName?", function(req, res) {
+    var friendName = req.params.friendName;
+    console.log(friendName);
+
+    if (friendName) {
+        for (var i = 0; i < friends.length; i++) {
+            if (friendName === friends[i].name) {
+                console.log("another", friendName);
+                return res.json(friends[i]);
+            }
+        }
+        return res.json(false);
+    }
+    return res.json(friends);
 });
+
+app.post("/api/friend", function(req, res) {
+    var body = req.body;
+    var index = compareFriends(friends, parseInt(req.body.scoreTotal));
+    friends.push(body);
+    return res.json(friends[index]);
+    console.log(friends);
+}); 
+
+}
+
+
+
